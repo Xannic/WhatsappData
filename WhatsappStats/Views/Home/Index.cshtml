@@ -16,6 +16,7 @@
 <br />
 <canvas id="hours"></canvas><br />
 <canvas id="days"></canvas><br />
+<canvas id="weekdays"></canvas><br />
 <canvas id="months"></canvas>
 
 
@@ -24,6 +25,26 @@
 
 <script>
     var JSON_RAW = @Html.Raw(JsonConvert.SerializeObject(Model));
+
+    var ctx2 = document.getElementById('weekdays').getContext('2d');
+    var chart = new Chart(ctx2, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: JSON_RAW.MonthLabels,
+            datasets: [{
+                label: "Messages",
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: JSON_RAW.MonthMessagesCount
+            }]
+        },
+
+        // Configuration options go here
+        options: {}
+    });
 
     var ctx2 = document.getElementById('months').getContext('2d');
     var chart = new Chart(ctx2, {

@@ -33,6 +33,8 @@ namespace WhatsappStats.Models
         public int[] DayMessagesCount { get; set; }
         public string[] MonthLabels { get; set; }
         public int[] MonthMessagesCount { get; set; }
+        public string[] WeekDayLabels { get; set; }
+        public int[] WeekDayMessagesCount { get; set; }
         public int TalkingStreak { get; set; }
     }
 }

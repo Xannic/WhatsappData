@@ -20,7 +20,9 @@ namespace WhatsappStats.Controllers
         double GirlfriendMessages = 0;
         int[] MessagesOnHours = new int[24];
         int streak = 0;
+
         Dictionary<string, List<MessageObject>> MessagesByMonth = new Dictionary<string, List<MessageObject>>();
+        Dictionary<string, List<MessageObject>> MessagesByWeekDay = new Dictionary<string, List<MessageObject>>();
         public IActionResult Index()
         {
             var vm = new ViewModel();
@@ -58,6 +60,9 @@ namespace WhatsappStats.Controllers
             vm.TalkingStreak = streak;
             vm.MonthLabels = MessagesByMonth.Keys.ToArray();
             vm.MonthMessagesCount = MessagesByMonth.Select(x => x.Value.Count()).ToArray();
+
+            vm.WeekDayLabels = MessagesByMonth.Keys.ToArray();
+            vm.WeekDayMessagesCount = MessagesByMonth.Select(x => x.Value.Count()).ToArray();
             return View(vm);
         }
 
@@ -126,9 +131,13 @@ namespace WhatsappStats.Controllers
 
                     var monthkey = dateTime.ToString("MMM-yy");
                     if (!MessagesByMonth.ContainsKey(monthkey))
-                    {
                         MessagesByMonth.Add(monthkey, new List<MessageObject>());
-                    }
+
+                    var WeekDaykey = dateTime.ToString("MMM-yy");
+                    if (!MessagesByWeekDay.ContainsKey(WeekDaykey))
+                        MessagesByWeekDay.Add(WeekDaykey, new List<MessageObject>());
+
+                    MessagesByWeekDay[WeekDaykey].Add(new MessageObject { Message = currentLine, Sender = sender, Time = time, Media = media });
                     MessagesByMonth[monthkey].Add(new MessageObject { Message = currentLine, Sender = sender, Time = time, Media = media });
                     dict[date].Add(new MessageObject { Message = currentLine, Sender = sender, Time = time, Media = media });
                 }

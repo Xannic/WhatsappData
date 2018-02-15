@@ -1,0 +1,112 @@
+﻿@model ViewModel
+@using Newtonsoft.Json;
+
+<h2>Relationship Report</h2>
+<b>Subject:</b> Boyfriend, Girlfriend<br />
+<b>Started Talking:</b> @Model.StartedTalkingDate<br />
+<b>Most Active Day:</b> @Model.MostActiveDay (@Model.MessagesOnMostActiveDay Messages!)<br />
+<br />
+<b>Total Words:</b> @Model.WordCount Words!<br />
+<b>Total Media Files:</b> @Model.MediaCount<br />
+<b>Average Messages per day:</b> @(Math.Round(Model.TotalMessages / Model.Dict.Keys.Count()))<br />
+<b>Total Consecutively Days Talking:</b> @Model.TalkingStreak<br />
+<br />
+<b>Boyfriend Message Share:</b> @(Math.Round(Model.BoyfriendMessages / Model.TotalMessages * 100))%<br />
+<b>Girlfriend Message Share:</b> @(Math.Round(Model.GirlfriendMessages / Model.TotalMessages * 100))%<br />
+<br />
+<canvas id="hours"></canvas><br />
+<canvas id="days"></canvas><br />
+<canvas id="months"></canvas>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
+
+<script>
+    var JSON_RAW = @Html.Raw(JsonConvert.SerializeObject(Model));
+
+    var ctx2 = document.getElementById('months').getContext('2d');
+    var chart = new Chart(ctx2, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: JSON_RAW.MonthLabels,
+            datasets: [{
+                label: "Messages",
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: JSON_RAW.MonthMessagesCount
+            }]
+        },
+
+        // Configuration options go here
+        options: {}
+    });
+
+    var ctx2 = document.getElementById('days').getContext('2d');
+    var chart = new Chart(ctx2, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: JSON_RAW.DayLabels,
+            datasets: [{
+                label: "Messages",
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: JSON_RAW.DayMessagesCount
+            }]
+        },
+
+        // Configuration options go here
+        options: {}
+    });
+
+    var ctx = document.getElementById('hours').getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: [
+                "0:00",
+                "1:00",
+                "2:00",
+                "3:00",
+                "4:00",
+                "5:00",
+                "6:00",
+                "7:00",
+                "8:00",
+                "9:00",
+                "10:00",
+                "11:00",
+                "12:00",
+                "13:00",
+                "14:00",
+                "15:00",
+                "16:00",
+                "17:00",
+                "18:00",
+                "19:00",
+                "20:00",
+                "21:00",
+                "22:00",
+                "23:00",
+            ],
+            datasets: [{
+                label: "Messages",
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: JSON_RAW.MessagesOnHours
+            }]
+        },
+
+        // Configuration options go here
+        options: {}
+    });
+</script>
